@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "330565435094",
+    "project_id": "projeto-reitoria",
+    "storage_bucket": "projeto-reitoria.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330565435094:android:0c50f77dd063076be39377",
+        "android_client_info": {
+          "package_name": "br.com.example.reitoria2025"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330565435094-fdtbsnohflhgbu2fi45n8kip5tpej4ii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.example.reitoria2025",
+            "certificate_hash": "e197a19201c12812922f7764b91bd8cac86d1055"
+          }
+        },
+        {
+          "client_id": "330565435094-tnu1ln6di4c8s26gsuf7kfbclpbkv670.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALCcGQls5_xbN8SARifM_gtifZ0OIG1HQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330565435094-tnu1ln6di4c8s26gsuf7kfbclpbkv670.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
