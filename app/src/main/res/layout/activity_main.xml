@@ -8,20 +8,20 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/adicionarSugestaoButton"
         android:layout_width="222dp"
         android:layout_height="0dp"
         android:layout_marginTop="41dp"
         android:layout_marginBottom="47dp"
         android:text="Adicionar sugestão"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/sugestoesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/sugestoesButton"
         android:layout_width="214dp"
         android:layout_height="0dp"
         android:layout_marginBottom="47dp"
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/adicionarSugestaoButton" />
 
     <Button
         android:id="@+id/button3"
@@ -40,5 +40,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/sugestoesButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
