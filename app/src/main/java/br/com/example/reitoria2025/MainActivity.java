@@ -2,6 +2,7 @@ package br.com.example.reitoria2025;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +36,21 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        mAuth = FirebaseAuth.getInstance();
 
         Button adicionarSugestaoButton = findViewById(R.id.adicionarSugestaoButton);
         Button sugestoesButton = findViewById(R.id.sugestoesButton);
+        Button logoutButton = findViewById(R.id.logoutButton);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("app-config", MODE_PRIVATE);
+        String nomeUsuarioLogado = sharedPreferences.getString("nome", "Sem nome");
+        String email = sharedPreferences.getString("email", "Sem email");
 
         adicionarSugestaoButton.setOnClickListener(v -> {
             LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
@@ -44,11 +63,12 @@ public class MainActivity extends AppCompatActivity {
                     .setTitle("Nova Sugestão")
                     .setView(view)
                     .setPositiveButton("Salvar", (dialog, which) -> {
-                        String nome = nomeEditText.getText().toString().trim();
+                        nomeEditText.setText(nomeUsuarioLogado);
+                        nomeEditText.setEnabled(false);
                         String texto = sugestaoEditText.getText().toString().trim();
 
-                        if (!nome.isEmpty() && !texto.isEmpty()) {
-                            Sugestao sugestao = new Sugestao(nome, texto);
+                        if (!texto.isEmpty()) {
+                            Sugestao sugestao = new Sugestao(nomeUsuarioLogado, texto);
 
                             FirebaseFirestore.getInstance()
                                     .collection("sugestoes")
@@ -72,6 +92,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
+        });
+
+        logoutButton.setOnClickListener(v -> logout());
+
+    }
+
+    private void logout() {
+        // Firebase Sign-out
+        mAuth.signOut();
+
+        // Google Sign-out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            // Vai para tela de login
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 }

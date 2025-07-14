@@ -3,10 +3,12 @@ package br.com.example.reitoria2025;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +16,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    private static final int RC_SIGN_IN = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,70 +41,82 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        FirebaseApp.initializeApp(this);
 
-        EditText nomeEditText = findViewById(R.id.nomeEditText);
-        EditText emailEditText = findViewById(R.id.emailEditText);
-        EditText senhaEditText = findViewById(R.id.senhaEditText);
-        Button loginButton = findViewById(R.id.loginButton);
+        // inicializa o ffirebase auth
+        mAuth = FirebaseAuth.getInstance();
+        //mAuth.getCurrentUser()
+        if (mAuth.getCurrentUser() != null) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        } else {
 
-        SharedPreferences preferences = getSharedPreferences("dados", MODE_PRIVATE);
-        String nomeSalvo = preferences.getString("nome", "");
-        nomeEditText.setText(nomeSalvo);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String nome = nomeEditText.getText().toString().trim();
-                String email = emailEditText.getText().toString().trim();
-                String senha = senhaEditText.getText().toString().trim();
+        // configura o google sign-in
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
-                if (!nome.equals("") && !email.equals("") && !senha.equals("")) {
-                    auth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(task -> { //para login
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = auth.getCurrentUser();
-                            Toast.makeText(getApplicationContext(), "Login bem-sucedido: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+        // inicializa o cliente do google
+        mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
 
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("nome", nome);
-                            editor.apply();
+        SignInButton btnGoogle = findViewById(R.id.btnGoogle);
+        btnGoogle.setOnClickListener(v -> signIn());
+        }
+    }
 
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            //se o login falhar, tenta cadastrar
-                            auth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(createTask -> {
-                                if (createTask.isSuccessful()) {
-                                    FirebaseUser user = auth.getCurrentUser();
-                                    Toast.makeText(getApplicationContext(), "Usuário criado: " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString("nome", nome);
-                                    editor.apply();
 
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Erro: " + createTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-                }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                Log.w("GOOGLE_SIGN_IN", "Google sign in failed", e);
             }
-        });
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        //salvar no sharedpreferences
+                        String nome = user.getDisplayName();
+                        String email = user.getEmail();
+
+                        SharedPreferences sharedPreferences = getSharedPreferences("app-config", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("nome", nome);
+                        editor.putString("email", email);
+                        editor.apply();
+                        startActivity(new Intent(this, MainActivity.class));
+                        Toast.makeText(getApplicationContext(), "Login bem sucedido!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Falha no login", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 }
