@@ -5,40 +5,48 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/tela_inicial_layout"
     tools:context=".MainActivity">
 
-    <Button
+    <ImageView
         android:id="@+id/adicionarSugestaoButton"
-        android:layout_width="222dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="41dp"
-        android:layout_marginBottom="47dp"
-        android:text="Adicionar sugestão"
-        app:layout_constraintBottom_toTopOf="@+id/sugestoesButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/sugestoesButton"
-        android:layout_width="214dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="47dp"
-        android:text="Lista de sugestões"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adicionarSugestaoButton" />
-
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="219dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="540dp"
-        android:text="Logout"
+        android:layout_width="180dp"
+        android:layout_height="123dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="281dp"
+        android:layout_marginEnd="206dp"
+        android:layout_marginBottom="487dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sugestoesButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_sugestao_btn" />
+
+    <ImageView
+        android:id="@+id/sugestoesButton"
+        android:layout_width="181dp"
+        android:layout_height="122dp"
+        android:layout_marginStart="205dp"
+        android:layout_marginTop="282dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="487dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ver_sugestao_btn" />
+
+    <ImageView
+        android:id="@+id/logoutButton"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="236dp"
+        android:layout_marginBottom="805dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logout_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

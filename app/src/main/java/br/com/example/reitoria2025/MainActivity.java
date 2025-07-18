@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,15 +39,17 @@ public class MainActivity extends AppCompatActivity {
         });
         mAuth = FirebaseAuth.getInstance();
 
-        Button adicionarSugestaoButton = findViewById(R.id.adicionarSugestaoButton);
-        Button sugestoesButton = findViewById(R.id.sugestoesButton);
-        Button logoutButton = findViewById(R.id.logoutButton);
+        ImageView adicionarSugestaoButton = findViewById(R.id.adicionarSugestaoButton);
+        ImageView sugestoesButton = findViewById(R.id.sugestoesButton);
+        ImageView logoutButton = findViewById(R.id.logoutButton);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        //ver pq n ta salvando
 
         SharedPreferences sharedPreferences = getSharedPreferences("app-config", MODE_PRIVATE);
         String nomeUsuarioLogado = sharedPreferences.getString("nome", "Sem nome");
@@ -59,12 +62,13 @@ public class MainActivity extends AppCompatActivity {
             EditText nomeEditText = view.findViewById(R.id.nomeEditText);
             EditText sugestaoEditText = view.findViewById(R.id.sugestaoEditText);
 
+            nomeEditText.setText(nomeUsuarioLogado);
+            nomeEditText.setEnabled(false);
+
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Nova Sugestão")
                     .setView(view)
                     .setPositiveButton("Salvar", (dialog, which) -> {
-                        nomeEditText.setText(nomeUsuarioLogado);
-                        nomeEditText.setEnabled(false);
                         String texto = sugestaoEditText.getText().toString().trim();
 
                         if (!texto.isEmpty()) {
