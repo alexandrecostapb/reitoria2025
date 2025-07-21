@@ -11,6 +11,7 @@
         android:id="@+id/nomeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#008744"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -19,5 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:textColor="#000000"
         android:textSize="14sp" />
 </LinearLayout>

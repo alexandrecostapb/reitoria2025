@@ -11,24 +11,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/adicionar_sugestao_layout" />
 
         <EditText
             android:id="@+id/nomeEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Seu nome" />
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="#d9d9d9"
+            android:hint="Seu nome"
+            android:paddingHorizontal="15dp" />
 
         <EditText
             android:id="@+id/sugestaoEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="#d9d9d9"
             android:hint="Sua sugestão"
             android:inputType="textMultiLine"
-            android:minLines="3" />
+            android:minLines="3"
+            android:paddingHorizontal="15dp" />
     </LinearLayout>
 
 

@@ -54,31 +54,26 @@ public class LoginActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+            finish();
         } else {
+            // configura o google sign-in
+            GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
 
+            // inicializa o cliente do google
+            mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
 
-
-        // configura o google sign-in
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        // inicializa o cliente do google
-        mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
-
-        SignInButton btnGoogle = findViewById(R.id.btnGoogle);
-        btnGoogle.setOnClickListener(v -> signIn());
+            SignInButton btnGoogle = findViewById(R.id.btnGoogle);
+            btnGoogle.setOnClickListener(v -> signIn());
         }
     }
-
-
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -117,6 +112,5 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Falha no login", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 }

@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             nomeEditText.setEnabled(false);
 
             new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Nova Sugestão")
                     .setView(view)
                     .setPositiveButton("Salvar", (dialog, which) -> {
                         String texto = sugestaoEditText.getText().toString().trim();
