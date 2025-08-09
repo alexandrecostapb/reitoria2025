@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backgroundColor">#313131</color> <!-- fundo branco -->
+    <color name="textColorHint">#000000</color> <!-- texto preto -->
+    <color name="background">#6F6F6F</color>
+    <color name="textColor">#DBDBDB</color>
+</resources>

@@ -29,8 +29,13 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
     @Override
     public void onBindViewHolder(@NonNull SugestaoViewHolder holder, int position) {
         Sugestao sugestao = sugestoes.get(position);
-        holder.textViewNome.setText(sugestao.getNome());
+        if (sugestao.isAnonimo()) {
+            holder.textViewNome.setText("Anônimo");
+        } else {
+            holder.textViewNome.setText(sugestao.getNome());
+        }
         holder.textViewTexto.setText(sugestao.getTexto());
+        holder.textViewCategoria.setText("Categoria: " + sugestao.getCategoria());
     }
 
     @Override
@@ -39,12 +44,13 @@ public class SugestaoAdapter extends RecyclerView.Adapter<SugestaoAdapter.Sugest
     }
 
     static class SugestaoViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewNome, textViewTexto;
+        TextView textViewNome, textViewTexto, textViewCategoria;
 
         public SugestaoViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewNome = itemView.findViewById(R.id.nomeTextView);
             textViewTexto = itemView.findViewById(R.id.textoTextView);
+            textViewCategoria = itemView.findViewById(R.id.categoriaTextView);
         }
     }
 }

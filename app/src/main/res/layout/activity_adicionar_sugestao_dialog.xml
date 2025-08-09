@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AdicionarSugestaoDialog">
@@ -22,15 +22,26 @@
             android:layout_marginBottom="40dp"
             android:src="@drawable/adicionar_sugestao_layout" />
 
+        <Spinner
+            android:id="@+id/categoriasSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:entries="@array/categoriasSpinner"
+            android:paddingHorizontal="15dp" />
+
         <EditText
             android:id="@+id/nomeEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="#d9d9d9"
+            android:background="@color/background"
             android:hint="Seu nome"
-            android:paddingHorizontal="15dp" />
+            android:paddingHorizontal="15dp"
+            android:textColorHint="@color/textColorHint" />
 
         <EditText
             android:id="@+id/sugestaoEditText"
@@ -38,11 +49,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="#d9d9d9"
+            android:background="@color/background"
             android:hint="Sua sugestão"
             android:inputType="textMultiLine"
             android:minLines="3"
-            android:paddingHorizontal="15dp" />
+            android:paddingHorizontal="15dp"
+            android:textColorHint="@color/textColorHint" />
+
+        <CheckBox
+            android:id="@+id/anonimoCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingHorizontal="5dp"
+            android:text="Anônimo" />
     </LinearLayout>
 
 
