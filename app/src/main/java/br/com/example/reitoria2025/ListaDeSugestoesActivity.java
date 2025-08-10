@@ -50,8 +50,8 @@ public class ListaDeSugestoesActivity extends AppCompatActivity {
         voltarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                // Retirei o comando de "abertura" da página principal (que ocorria por meio de um Intent) e deixei ele só fechando a página atual (a da lista de sugestões, no caso).
+                // Fiz essa alteração pois agora, na MainActivity, a mesma não é mais fechada ao ir para a lista de sugestões, fazendo o usuário volltar para ela apenas fechando a tela atual, em vez de fazer isso e ter que abrir outra tela.
                 finish();
             }
         });

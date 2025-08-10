@@ -7,13 +7,29 @@
     android:orientation="vertical"
     android:padding="12dp">
 
-    <TextView
-        android:id="@+id/nomeTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#008744"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/nomeTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:textColor="#008744"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dataTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="end"
+            android:textColor="#515151" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textoTextView"
@@ -23,11 +39,25 @@
         android:textColor="@color/textColor"
         android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/categoriaTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAlignment="textEnd"
-        android:textColor="#515151" />
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/campusTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#515151" />
+
+        <TextView
+            android:id="@+id/categoriaTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:textColor="#515151" />
+    </LinearLayout>
 </LinearLayout>

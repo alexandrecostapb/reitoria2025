@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,11 +20,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -64,7 +69,10 @@ public class MainActivity extends AppCompatActivity {
             CheckBox anonimoCheckBox = view.findViewById(R.id.anonimoCheckBox);
             Spinner categoriaSpinner = view.findViewById(R.id.categoriasSpinner);
 
-            //carrega valores do spinner a partir do xml
+            Spinner spinnerCampus = view.findViewById(R.id.spinnerCampus);
+            EditText campusOutroEditText = view.findViewById(R.id.campusOutroEditText);
+
+            // Carrega valores do spinner de categorias a partir do xml
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                     MainActivity.this,
                     R.array.categoriasSpinner,
@@ -72,6 +80,31 @@ public class MainActivity extends AppCompatActivity {
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             categoriaSpinner.setAdapter(adapter);
+
+            // Carrega valores do spinner de campus
+            ArrayAdapter<CharSequence> adapterCampus = ArrayAdapter.createFromResource(
+                    MainActivity.this,
+                    R.array.campusSpinner,
+                    android.R.layout.simple_spinner_item
+            );
+            adapterCampus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCampus.setAdapter(adapterCampus);
+
+            // Mostrar EditText se "Outro" for selecionado
+            spinnerCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selected = parent.getItemAtPosition(position).toString();
+                    if (selected.equals("Outro")) {
+                        campusOutroEditText.setVisibility(View.VISIBLE);
+                    } else {
+                        campusOutroEditText.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { }
+            });
 
             nomeEditText.setText(nomeUsuarioLogado);
             nomeEditText.setEnabled(false);
@@ -84,8 +117,22 @@ public class MainActivity extends AppCompatActivity {
                         String nomeParaSalvar = anonimo ? "" : nomeUsuarioLogado;
                         String categoriaSelecionada = categoriaSpinner.getSelectedItem().toString();
 
-                        if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria")) {
-                            Sugestao sugestao = new Sugestao(nomeParaSalvar, texto, anonimo, categoriaSelecionada);
+                        // Captura o valor do campus
+                        String campusSelecionado;
+                        if (spinnerCampus.getSelectedItem().toString().equals("Outro")) {
+                            campusSelecionado = campusOutroEditText.getText().toString().trim();
+                        } else {
+                            campusSelecionado = spinnerCampus.getSelectedItem().toString();
+                        }
+
+                        if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria") && !campusSelecionado.equals("Selecione seu campus")) {
+                            Map<String, Object> sugestao = new HashMap<>();
+                            sugestao.put("nome", nomeParaSalvar);
+                            sugestao.put("texto", texto);
+                            sugestao.put("anonimo", anonimo);
+                            sugestao.put("categoria", categoriaSelecionada);
+                            sugestao.put("campus", campusSelecionado);
+                            sugestao.put("dataInsercao", FieldValue.serverTimestamp()); // salva data/hora do servidor
 
                             FirebaseFirestore.getInstance()
                                     .collection("sugestoes")
@@ -95,8 +142,6 @@ public class MainActivity extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Toast.makeText(MainActivity.this, "Erro ao salvar: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                     });
-                                    //.addOnFailureListener(e ->
-                                        //Toast.makeText(MainActivity.this, "Erro ao salvar!", Toast.LENGTH_SHORT).show());
                         } else {
                             Toast.makeText(MainActivity.this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
                         }

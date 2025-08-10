@@ -18,8 +18,10 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_marginBottom="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:src="@drawable/adicionar_sugestao_layout" />
 
         <Spinner
@@ -54,7 +56,34 @@
             android:inputType="textMultiLine"
             android:minLines="3"
             android:paddingHorizontal="15dp"
+            android:paddingBottom="10dp"
             android:textColorHint="@color/textColorHint" />
+
+        <!-- NOVO: Spinner de Campus -->
+        <Spinner
+            android:id="@+id/spinnerCampus"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:entries="@array/campusSpinner"
+            android:paddingHorizontal="15dp" />
+
+        <!-- SE QUISER: EditText só aparece se usuário escolher "Outro" -->
+        <EditText
+            android:id="@+id/campusOutroEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d9d9d9"
+            android:hint="Digite seu campus"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/anonimoCheckBox"

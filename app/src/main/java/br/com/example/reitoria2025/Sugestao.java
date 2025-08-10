@@ -1,20 +1,24 @@
 package br.com.example.reitoria2025;
 
 import android.widget.Spinner;
+import com.google.firebase.Timestamp;
 
 public class Sugestao {
     private String nome;
     private String texto;
     private boolean anonimo;
     private String categoria;
+    private Timestamp dataInsercao;
+    private String campus;
 
     public Sugestao() {} // Necessário para o Firebase
 
-    public Sugestao(String nome, String texto, boolean anonimo, String categoria) {
+    public Sugestao(String nome, String texto, boolean anonimo, String categoria, String campus) {
         this.nome = nome;
         this.texto = texto;
         this.anonimo = anonimo;
         this.categoria = categoria;
+        this.campus = campus;
     }
 
     public String getNome() {
@@ -33,6 +37,14 @@ public class Sugestao {
         return categoria;
     }
 
+    public Timestamp getDataInsercao() {
+        return dataInsercao;
+    }
+
+    public String getCampus() {
+        return campus;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -49,6 +61,14 @@ public class Sugestao {
         this.categoria = categoria;
     }
 
+    public void setDataInsercao(Timestamp dataInsercao) {
+        this.dataInsercao = dataInsercao;
+    }
+
+    public void setCampus(String campus) {
+        this.campus = campus;
+    }
+
     @Override
     public String toString() {
         return "Sugestão {" +
@@ -56,6 +76,7 @@ public class Sugestao {
                 " | Texto: " + texto +
                 " | Anônimo: " + anonimo +
                 " | Categoria: " + categoria +
+                " | " + campus +
                 "}";
     }
 }
