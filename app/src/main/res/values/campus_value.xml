@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="campusSpinner">
+        <item>Selecione seu campus</item>
+        <item>Campus João Pessoa</item>
+        <item>Campus Campina Grande</item>
+        <item>Campus Patos</item>
+        <item>Campus Cajazeiras</item>
+        <item>Campus Sousa</item>
+        <item>Campus Picuí</item>
+        <item>Outro</item>
+    </string-array>
+</resources>
