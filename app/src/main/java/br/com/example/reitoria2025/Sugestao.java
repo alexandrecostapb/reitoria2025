@@ -6,6 +6,7 @@ import com.google.firebase.Timestamp;
 public class Sugestao {
     private String nome;
     private String texto;
+    private String email;
     private boolean anonimo;
     private String categoria;
     private Timestamp dataInsercao;
@@ -13,9 +14,10 @@ public class Sugestao {
 
     public Sugestao() {} // Necessário para o Firebase
 
-    public Sugestao(String nome, String texto, boolean anonimo, String categoria, String campus) {
+    public Sugestao(String nome, String texto, String email, boolean anonimo, String categoria, String campus) {
         this.nome = nome;
         this.texto = texto;
+        this.email = email;
         this.anonimo = anonimo;
         this.categoria = categoria;
         this.campus = campus;
@@ -45,6 +47,10 @@ public class Sugestao {
         return campus;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -69,6 +75,10 @@ public class Sugestao {
         this.campus = campus;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "Sugestão {" +
@@ -77,6 +87,7 @@ public class Sugestao {
                 " | Anônimo: " + anonimo +
                 " | Categoria: " + categoria +
                 " | " + campus +
+                " | E-mail: " + email +
                 "}";
     }
 }

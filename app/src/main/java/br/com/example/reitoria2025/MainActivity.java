@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                             Map<String, Object> sugestao = new HashMap<>();
                             sugestao.put("nome", nomeParaSalvar);
                             sugestao.put("texto", texto);
+                            sugestao.put("email", email);
                             sugestao.put("anonimo", anonimo);
                             sugestao.put("categoria", categoriaSelecionada);
                             sugestao.put("campus", campusSelecionado);

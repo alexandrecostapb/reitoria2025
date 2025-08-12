@@ -4,4 +4,6 @@
     <color name="textColorHint">#000000</color> <!-- texto preto -->
     <color name="background">#6F6F6F</color>
     <color name="textColor">#DBDBDB</color>
+    <color name="userTextColor">#00bf63</color>
+    <color name="balloonTextColor">#7a7a7a</color>
 </resources>

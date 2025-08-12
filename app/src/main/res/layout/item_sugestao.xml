@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:textColor="#008744"
+            android:textColor="@color/userTextColor"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="end"
-            android:textColor="#515151" />
+            android:textColor="@color/balloonTextColor" />
     </LinearLayout>
 
     <TextView
@@ -50,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="#515151" />
+            android:textColor="@color/balloonTextColor" />
 
         <TextView
             android:id="@+id/categoriaTextView"
@@ -58,6 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:textColor="#515151" />
+            android:textColor="@color/balloonTextColor" />
     </LinearLayout>
 </LinearLayout>
