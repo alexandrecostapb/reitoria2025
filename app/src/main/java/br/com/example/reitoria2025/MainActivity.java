@@ -151,8 +151,6 @@ public class MainActivity extends AppCompatActivity {
             CheckBox anonimoCheckBox = view.findViewById(R.id.anonimoCheckBox);
             Spinner categoriaSpinner = view.findViewById(R.id.categoriasSpinner);
 
-            //Spinner spinnerCampus = view.findViewById(R.id.spinnerCampus);
-            //EditText campusOutroEditText = view.findViewById(R.id.campusOutroEditText);
 
             // Carrega valores do spinner de categorias a partir do xml
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -162,31 +160,6 @@ public class MainActivity extends AppCompatActivity {
             );
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             categoriaSpinner.setAdapter(adapter);
-
-            // Carrega valores do spinner de campus
-            //ArrayAdapter<CharSequence> adapterCampus = ArrayAdapter.createFromResource(
-            //        MainActivity.this,
-            //        R.array.campusSpinner,
-            //        android.R.layout.simple_spinner_item
-            //);
-            //adapterCampus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            //spinnerCampus.setAdapter(adapterCampus);
-
-            // Mostrar EditText se "Outro" for selecionado
-            //spinnerCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            //    @Override
-            //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            //        String selected = parent.getItemAtPosition(position).toString();
-            //        if (selected.equals("Outro")) {
-            //            campusOutroEditText.setVisibility(View.VISIBLE);
-            //        } else {
-            //            campusOutroEditText.setVisibility(View.GONE);
-            //        }
-            //    }
-
-            //    @Override
-            //    public void onNothingSelected(AdapterView<?> parent) { }
-            //});
 
             nomeEditText.setText(nomeUsuarioLogado);
             nomeEditText.setEnabled(false);
@@ -198,16 +171,6 @@ public class MainActivity extends AppCompatActivity {
                         boolean anonimo = anonimoCheckBox.isChecked();
                         String nomeParaSalvar = anonimo ? "" : nomeUsuarioLogado;
                         String categoriaSelecionada = categoriaSpinner.getSelectedItem().toString();
-
-                        // Captura o valor do campus
-                        //String campusSelecionado;
-                        //if (spinnerCampus.getSelectedItem().toString().equals("Outro")) {
-                        //    campusSelecionado = campusOutroEditText.getText().toString().trim();
-                        //} else {
-                        //    campusSelecionado = spinnerCampus.getSelectedItem().toString();
-                        //}
-
-                        //if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria") && !campusSelecionado.equals("Selecione seu campus")) {
 
                         if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria")) {
                             Map<String, Object> sugestao = new HashMap<>();
