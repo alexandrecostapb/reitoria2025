@@ -6,4 +6,5 @@
     <color name="textColor">#000000</color>
     <color name="userTextColor">#008744</color>
     <color name="balloonTextColor">#515151</color>
+    <color name="mainTextColor">#ffffff</color>
 </resources>

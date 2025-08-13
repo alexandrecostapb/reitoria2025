@@ -3,15 +3,18 @@ package br.com.example.reitoria2025;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,16 +37,27 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
+    private static final String PREFS_NAME = "AppPrefs";
+    private static final String KEY_CAMPUS = "campus";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        Window window = getWindow();
+        window.setStatusBarColor(Color.parseColor("#008744"));
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //
+        TextView saudacaoTextView = findViewById(R.id.saudacaoTextView);
+        TextView infoCampusTextView = findViewById(R.id.infoCampusTextView);
+
+
         mAuth = FirebaseAuth.getInstance();
 
         ImageView adicionarSugestaoButton = findViewById(R.id.adicionarSugestaoButton);
@@ -60,6 +74,74 @@ public class MainActivity extends AppCompatActivity {
         String nomeUsuarioLogado = sharedPreferences.getString("nome", "Sem nome");
         String email = sharedPreferences.getString("email", "Sem email");
 
+        saudacaoTextView.setText("Olá, " + nomeUsuarioLogado + "!");
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String campusSalvo = prefs.getString(KEY_CAMPUS, "");
+        if (!campusSalvo.isEmpty()) {
+            infoCampusTextView.setText("Campus: " + campusSalvo);
+        } else {
+            infoCampusTextView.setText("Campus: informe seu campus");
+        }
+
+        infoCampusTextView.setOnClickListener(v -> {
+            // Infla o layout do diálogo com o Spinner e o EditText
+            View dialogView = LayoutInflater.from(MainActivity.this)
+                    .inflate(R.layout.activity_informar_campus, null);
+            Spinner campusSpinner = dialogView.findViewById(R.id.campus2Spinner);
+            EditText outroEditTextDialog = dialogView.findViewById(R.id.outro2EditText);
+
+            // Configura o Spinner
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    MainActivity.this,
+                    R.array.campusSpinner, // lista no strings.xml
+                    android.R.layout.simple_spinner_item
+            );
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            campusSpinner.setAdapter(adapter);
+
+            // Mostra/oculta o campo "Outro"
+            campusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selected = parent.getItemAtPosition(position).toString();
+                    if (selected.equals("Outro")) {
+                        outroEditTextDialog.setVisibility(View.VISIBLE);
+                    } else {
+                        outroEditTextDialog.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { }
+            });
+
+            // Cria e exibe o diálogo
+            new AlertDialog.Builder(MainActivity.this)
+                    .setView(dialogView)
+                    .setPositiveButton("Salvar", (dialog, which) -> {
+                        String campusSelecionado = campusSpinner.getSelectedItem().toString();
+
+                        // Se for "Outro", pega o texto digitado
+                        if (campusSelecionado.equals("Outro")) {
+                            String outroDigitado = outroEditTextDialog.getText().toString().trim();
+                            if (!outroDigitado.isEmpty()) {
+                                campusSelecionado = outroDigitado;
+                            }
+                        }
+
+                        // Atualiza o texto da TextView
+                        infoCampusTextView.setText("Campus: " + campusSelecionado);
+
+                        // Salva no SharedPreferences
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(KEY_CAMPUS, campusSelecionado);
+                        editor.apply();
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+        });
+
         adicionarSugestaoButton.setOnClickListener(v -> {
             LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
             View view = inflater.inflate(R.layout.activity_adicionar_sugestao_dialog, null);
@@ -69,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
             CheckBox anonimoCheckBox = view.findViewById(R.id.anonimoCheckBox);
             Spinner categoriaSpinner = view.findViewById(R.id.categoriasSpinner);
 
-            Spinner spinnerCampus = view.findViewById(R.id.spinnerCampus);
-            EditText campusOutroEditText = view.findViewById(R.id.campusOutroEditText);
+            //Spinner spinnerCampus = view.findViewById(R.id.spinnerCampus);
+            //EditText campusOutroEditText = view.findViewById(R.id.campusOutroEditText);
 
             // Carrega valores do spinner de categorias a partir do xml
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -82,29 +164,29 @@ public class MainActivity extends AppCompatActivity {
             categoriaSpinner.setAdapter(adapter);
 
             // Carrega valores do spinner de campus
-            ArrayAdapter<CharSequence> adapterCampus = ArrayAdapter.createFromResource(
-                    MainActivity.this,
-                    R.array.campusSpinner,
-                    android.R.layout.simple_spinner_item
-            );
-            adapterCampus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCampus.setAdapter(adapterCampus);
+            //ArrayAdapter<CharSequence> adapterCampus = ArrayAdapter.createFromResource(
+            //        MainActivity.this,
+            //        R.array.campusSpinner,
+            //        android.R.layout.simple_spinner_item
+            //);
+            //adapterCampus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //spinnerCampus.setAdapter(adapterCampus);
 
             // Mostrar EditText se "Outro" for selecionado
-            spinnerCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String selected = parent.getItemAtPosition(position).toString();
-                    if (selected.equals("Outro")) {
-                        campusOutroEditText.setVisibility(View.VISIBLE);
-                    } else {
-                        campusOutroEditText.setVisibility(View.GONE);
-                    }
-                }
+            //spinnerCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //    @Override
+            //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            //        String selected = parent.getItemAtPosition(position).toString();
+            //        if (selected.equals("Outro")) {
+            //            campusOutroEditText.setVisibility(View.VISIBLE);
+            //        } else {
+            //            campusOutroEditText.setVisibility(View.GONE);
+            //        }
+            //    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) { }
-            });
+            //    @Override
+            //    public void onNothingSelected(AdapterView<?> parent) { }
+            //});
 
             nomeEditText.setText(nomeUsuarioLogado);
             nomeEditText.setEnabled(false);
@@ -118,21 +200,23 @@ public class MainActivity extends AppCompatActivity {
                         String categoriaSelecionada = categoriaSpinner.getSelectedItem().toString();
 
                         // Captura o valor do campus
-                        String campusSelecionado;
-                        if (spinnerCampus.getSelectedItem().toString().equals("Outro")) {
-                            campusSelecionado = campusOutroEditText.getText().toString().trim();
-                        } else {
-                            campusSelecionado = spinnerCampus.getSelectedItem().toString();
-                        }
+                        //String campusSelecionado;
+                        //if (spinnerCampus.getSelectedItem().toString().equals("Outro")) {
+                        //    campusSelecionado = campusOutroEditText.getText().toString().trim();
+                        //} else {
+                        //    campusSelecionado = spinnerCampus.getSelectedItem().toString();
+                        //}
 
-                        if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria") && !campusSelecionado.equals("Selecione seu campus")) {
+                        //if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria") && !campusSelecionado.equals("Selecione seu campus")) {
+
+                        if (!texto.isEmpty() && !categoriaSelecionada.equals("Selecione uma categoria")) {
                             Map<String, Object> sugestao = new HashMap<>();
                             sugestao.put("nome", nomeParaSalvar);
                             sugestao.put("texto", texto);
                             sugestao.put("email", email);
                             sugestao.put("anonimo", anonimo);
                             sugestao.put("categoria", categoriaSelecionada);
-                            sugestao.put("campus", campusSelecionado);
+                            sugestao.put("campus", "Campus " + campusSalvo);
                             sugestao.put("dataInsercao", FieldValue.serverTimestamp()); // salva data/hora do servidor
 
                             FirebaseFirestore.getInstance()

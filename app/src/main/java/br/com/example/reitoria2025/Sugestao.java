@@ -86,7 +86,7 @@ public class Sugestao {
                 " | Texto: " + texto +
                 " | Anônimo: " + anonimo +
                 " | Categoria: " + categoria +
-                " | " + campus +
+                " | Campus: " + campus +
                 " | E-mail: " + email +
                 "}";
     }
